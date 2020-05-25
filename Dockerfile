@@ -1,5 +1,8 @@
 FROM python:3.7-alpine
 
+ENV http_proxy "http://git-proxy:8080/"
+ENV https_proxy "http://git-proxy:8080/"
+
 COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
