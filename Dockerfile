@@ -1,4 +1,4 @@
-FROM trestletech/plumber:latest
+FROM rpy2/rpy2:latest
 
 ENV http_proxy "http://git-proxy:8080"
 ENV https_proxy "http://git-proxy:8080"
@@ -7,6 +7,12 @@ RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('HDtweedie')" 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('glmnet')" 
 
-COPY / app/
+COPY ./requirements.txt /app/requirements.txt
+ 
+RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r /app/requirements.txt --proxy="http://git-proxy:8080"
 
-CMD ["/app/plumber_script.R"]
+COPY . /app
+
+ENTRYPOINT [ "python3" ]
+
+CMD [ "/app/app.py" ]
