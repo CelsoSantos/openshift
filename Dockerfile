@@ -3,13 +3,13 @@ FROM rpy2/rpy2:latest
 ENV http_proxy "http://git-proxy:8080"
 ENV https_proxy "http://git-proxy:8080"
 
+RUN apt-get update && apt-get remove -y python && apt-get install -y python3 r-base
+ 
+RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r requirements.txt --proxy="http://git-proxy:8080"
+
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('magrittr')" 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('HDtweedie')" 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('glmnet')" 
-
-COPY ./requirements.txt /app/requirements.txt
- 
-RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r /app/requirements.txt --proxy="http://git-proxy:8080"
 
 COPY . /app
 
