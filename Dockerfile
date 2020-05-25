@@ -3,7 +3,7 @@ FROM rpy2/rpy2:latest
 ENV http_proxy "http://git-proxy:8080"
 ENV https_proxy "http://git-proxy:8080"
 
-RUN apt-get update && apt-get remove -y python && apt-get install -y python3 r-base
+RUN yum install -y python3 r-base
  
 RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r requirements.txt --proxy="http://git-proxy:8080"
 
