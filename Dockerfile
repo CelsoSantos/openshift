@@ -1,4 +1,4 @@
-FROM trestletech/plumber
+FROM trestletech/plumber:latest
 
 ENV http_proxy "http://git-proxy:8080"
 ENV https_proxy "http://git-proxy:8080"
