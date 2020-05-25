@@ -1,14 +1,12 @@
-FROM python:3.7-alpine
+FROM trestletech/plumber
 
-ENV http_proxy "http://git-proxy:8080/"
-ENV https_proxy "https://git-proxy:8080/"
-ENV HTTP_PROXY "http://git-proxy:8080/"
-ENV HTTP_PROXY "https://git-proxy:8080/"
+ENV http_proxy "http://git-proxy:8080"
+ENV https_proxy "http://git-proxy:8080"
 
-RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r requirements.txt --proxy="http://git-proxy:8080"
+RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('magrittr')" 
+RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('HDtweedie')" 
+RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('glmnet')" 
 
-COPY . /app
+COPY / app/
 
-ENTRYPOINT [ "python" ]
-
-CMD [ "app.py" ]
+CMD ["/app/plumber_script.R"]

@@ -1,7 +1,7 @@
 FROM trestletech/plumber
 
-ENV http_proxy "http://wthproxy:8080"
-ENV https_proxy "http://wthproxy:8080"
+ENV http_proxy "http://git-proxy:8080"
+ENV https_proxy "http://git-proxy:8080"
 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('magrittr')" 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('HDtweedie')" 
@@ -9,4 +9,4 @@ RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-
 
 COPY / app/
 
-CMD ["/app/plumber_script2.R"]
+CMD ["/app/plumber_script.R"]
