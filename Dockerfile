@@ -9,17 +9,18 @@ RUN yum install -y epel-release && \
   yum clean all && \
   rm -rf /var/cache/yum
 
+RUN chown -R 1001:1001 /opt/app-root && \
+  chown -R 1001:1001 /usr/lib64/R/library && \
+  chown -R 1001:1001 
+
+USER 1001
+
 RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r requirements.txt 
 #--proxy="http://git-proxy:8080"
 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('magrittr')" 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('HDtweedie')" 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('glmnet')" 
-
-RUN chown -R 1001:1001 /opt/app-root && \
-  chown -R 1001:1001 /usr/lib64/R/library
-
-USER 1001
 
 COPY . /app
 
