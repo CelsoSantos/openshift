@@ -1,0 +1,59 @@
+FROM centos/s2i-base-centos7
+
+#ENV http_proxy "http://git-proxy:8080"
+#ENV https_proxy "http://git-proxy:8080"
+ENV PYTHON_VERSION "3.6.0"
+
+RUN yum install -y epel-release && \
+  yum install -y R && \
+  yum clean all && \
+  rm -rf /var/cache/yum
+
+RUN curl -SLO https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz \
+  && tar xvf Python-${PYTHON_VERSION}.tgz \
+  && cd Python-${PYTHON_VERSION} \
+  && ./configure --prefix=/usr/local \
+  && make \
+  && make altinstall \
+  && cd / \
+  && rm -rf Python-${PYTHON_VERSION}* \\
+  && ln -s /usr/local/bin/python3.6 /usr/bin/python3
+
+RUN chown -R 1001:1001 /opt/app-root && \
+  chown -R 1001:1001 /usr/local && \
+  chown -R 1001:1001 /usr/lib64/R/library
+
+USER 1001
+
+RUN python --version
+RUN python3 --version
+
+RUN which python
+RUN which python3
+
+RUN ls -la /usr/bin | grep python
+RUN ls -la /usr/local/bin | grep python
+
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+
+RUN python3 get-pip.py
+
+# RUN chown -R 1001:1001 /opt/app-root && \
+#   chown -R 1001:1001 /usr/lib64/R/library
+
+# USER 1001
+
+COPY . /app
+
+WORKDIR /app
+
+RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r requirements.txt 
+#--proxy="http://git-proxy:8080"
+
+RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('magrittr')" 
+RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('HDtweedie')" 
+RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('glmnet')" 
+
+ENTRYPOINT [ "python3" ]
+
+CMD [ "/app/app.py" ]
