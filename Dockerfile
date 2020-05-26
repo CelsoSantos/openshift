@@ -3,7 +3,7 @@ FROM python:3.6
 #ENV http_proxy "http://git-proxy:8080"
 #ENV https_proxy "http://git-proxy:8080"
 
-RUN yum install R
+RUN sudo yum -y install R
 
 RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r requirements.txt 
 #--proxy="http://git-proxy:8080"
