@@ -16,14 +16,18 @@ RUN chown -R 1001:1001 /opt/app-root && \
 
 USER 1001
 
+RUN pip install --upgrade pip
+
+COPY . /app
+
+WORKDIR /app
+
 RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r requirements.txt 
 # --proxy="http://git-proxy:8080"
 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('magrittr')" 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('HDtweedie')" 
 RUN R -e "options(repos = list(CRAN = 'https://cran.microsoft.com/snapshot/2019-01-06')); install.packages('glmnet')" 
-
-COPY . /app
 
 ENTRYPOINT [ "python3" ]
 
