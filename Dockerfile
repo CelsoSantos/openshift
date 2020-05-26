@@ -5,7 +5,7 @@ FROM centos/s2i-base-centos7
 
 
 RUN yum install -y epel-release && \
-  yum install -y R v8314-v8-devel gdal-devel proj-devel proj-nad proj-epsg  && \
+  yum install -y R v8314-v8-devel gdal-devel proj-devel proj-nad proj-epsg python-pip && \
   yum clean all && \
   rm -rf /var/cache/yum
 
