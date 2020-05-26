@@ -1,11 +1,11 @@
-FROM centos/s2i-base-centos7
+FROM centos/python-36-centos7
 
 #ENV http_proxy "http://git-proxy:8080"
 #ENV https_proxy "http://git-proxy:8080"
 
 
 RUN yum install -y epel-release && \
-  yum install -y R v8314-v8-devel gdal-devel proj-devel proj-nad proj-epsg python-pip && \
+  yum install -y R v8314-v8-devel gdal-devel proj-devel proj-nad proj-epsg && \
   yum clean all && \
   rm -rf /var/cache/yum
 
@@ -16,8 +16,9 @@ RUN chown -R 1001:1001 /opt/app-root && \
 
 USER 1001
 
+COPY . /app
+
 WORKDIR /app
-COPY . .
 
 RUN pip --trusted-host=pypi.python.org --trusted-host=pypi.org --trusted-host=files.pythonhosted.org install -r requirements.txt 
 #--proxy="http://git-proxy:8080"
