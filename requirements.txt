@@ -3,4 +3,3 @@ flask_cors
 json5
 jsonschema
 waitress
-rpy2
