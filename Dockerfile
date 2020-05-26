@@ -9,6 +9,8 @@ RUN yum install -y epel-release && \
   yum clean all && \
   rm -rf /var/cache/yum
 
+RUN python3 --version
+
 RUN chown -R 1001:1001 /opt/app-root && \
   chown -R 1001:1001 /usr/lib64/R/library
 
