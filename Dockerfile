@@ -10,8 +10,7 @@ RUN yum install -y epel-release && \
   rm -rf /var/cache/yum
 
 RUN chown -R 1001:1001 /opt/app-root && \
-  chown -R 1001:1001 /usr/lib64/R/library && \
-  chown -R 1001:1001 
+  chown -R 1001:1001 /usr/lib64/R/library
 
 USER 1001
 
